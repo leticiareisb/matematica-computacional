@@ -1,18 +1,29 @@
-import itertools
+def implicacao(p, q):
+    return not p or q
 
-def tabela_verdade():
-    combinacoes = list(itertools.product([True, False], repeat=3))
-    
-    print(f"{'P':<5}{'Q':<5}{'M':<5}{'P → Q':<10}{'P ∨ Q':<10}{'M → R':<10}{'¬P':<10}{'¬P → (M → R)':<15}{'R':<5}")
-    
-    for P, Q, M in combinacoes:
-        P_implica_Q = (not P) or Q
-        P_ou_Q = P or Q
-        M_implica_R = (not M) or P_ou_Q
-        nao_P = not P
-        nao_P_implica_M_implica_R = nao_P or M_implica_R
-        R = (P or Q) or (nao_P and M_implica_R)
-        
-        print(f"{P!s:<5}{Q!s:<5}{M!s:<5}{P_implica_Q!s:<10}{P_ou_Q!s:<10}{M_implica_R!s:<10}{nao_P!s:<10}{nao_P_implica_M_implica_R!s:<15}{R!s:<5}")
+combinacoes = [
+    {'P': True,  'Q': True,  'M': True},
+    {'P': True,  'Q': True,  'M': False},
+    {'P': True,  'Q': False, 'M': True},
+    {'P': True,  'Q': False, 'M': False},
+    {'P': False, 'Q': True,  'M': True},
+    {'P': False, 'Q': True,  'M': False},
+    {'P': False, 'Q': False, 'M': True},
+    {'P': False, 'Q': False, 'M': False}
+]
 
-tabela_verdade()
+print(" P    Q    M    R    P→Q   P∨Q→R ¬P→(M→R)")
+for combinacao in combinacoes:
+    P = combinacao['P']
+    Q = combinacao['Q']
+    M = combinacao['M']
+    
+    P_implica_Q = implicacao(P, Q)
+    
+    R = P or Q
+    P_ou_Q_implica_R = implicacao(P or Q, R)
+    
+    M_implica_R = implicacao(M, R)
+    nao_P_implica_M_implica_R = implicacao(not P, M_implica_R)
+    
+    print(f"{P}  {Q}  {M}  {R}  {P_implica_Q}  {P_ou_Q_implica_R}  {nao_P_implica_M_implica_R}")
